@@ -255,4 +255,5 @@ Para reportar bugs o solicitar nuevas características, contacta al administrado
 
 DetectNUM © 2025 - Sistema de Consulta Telefónica
 #   B e s t B i g D a t a  
+ #   B e s t B i g D a t a  
  
