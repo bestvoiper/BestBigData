@@ -1,0 +1,155 @@
+/**
+ * Estilos específicos para el panel de administración
+ * DetectNUM
+ */
+
+/* Admin Dashboard enhancements */
+.admin-stats-summary {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    border-radius: var(--card-radius);
+    padding: 30px;
+    color: #fff;
+    margin-bottom: 25px;
+}
+
+/* User management */
+.user-card {
+    border-left: 4px solid var(--primary-color);
+    transition: all 0.3s ease;
+}
+
+.user-card:hover {
+    border-left-color: var(--accent-color);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.user-card.inactive {
+    opacity: 0.7;
+    border-left-color: #6c757d;
+}
+
+/* Transaction history */
+.transaction-row.recharge {
+    border-left: 3px solid var(--success-color);
+}
+
+.transaction-row.search {
+    border-left: 3px solid var(--primary-color);
+}
+
+/* Settings form */
+.settings-section {
+    background: #fff;
+    border-radius: var(--card-radius);
+    padding: 25px;
+    margin-bottom: 20px;
+    border-left: 4px solid var(--accent-color);
+}
+
+.settings-section h5 {
+    color: var(--primary-color);
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+/* Modal improvements */
+.modal-content {
+    border: none;
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+.modal-header {
+    background: var(--primary-color);
+    color: #fff;
+    border: none;
+}
+
+.modal-header .btn-close {
+    filter: brightness(0) invert(1);
+}
+
+.modal-header i {
+    margin-right: 10px;
+}
+
+/* Quick actions */
+.quick-action-btn {
+    padding: 15px 20px;
+    border-radius: 10px;
+    border: 2px solid var(--primary-color);
+    background: transparent;
+    color: var(--primary-color);
+    font-weight: 600;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.quick-action-btn:hover {
+    background: var(--primary-color);
+    color: #fff;
+}
+
+.quick-action-btn i {
+    font-size: 1.2rem;
+}
+
+/* Status indicators */
+.status-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.status-indicator::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #6c757d;
+}
+
+.status-indicator.active::before {
+    background: var(--success-color);
+    box-shadow: 0 0 10px rgba(40, 167, 69, 0.5);
+}
+
+.status-indicator.inactive::before {
+    background: #dc3545;
+}
+
+/* Table actions */
+.table-actions {
+    white-space: nowrap;
+}
+
+.table-actions .btn {
+    padding: 5px 10px;
+    margin: 0 2px;
+}
+
+/* Charts placeholder */
+.chart-container {
+    min-height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f8f9fa;
+    border-radius: 10px;
+}
+
+/* Admin notification badge */
+.notification-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: var(--accent-color);
+    color: #fff;
+    font-size: 0.7rem;
+    padding: 2px 6px;
+    border-radius: 10px;
+    min-width: 18px;
+    text-align: center;
+}

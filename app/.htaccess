@@ -1,0 +1,8 @@
+# DetectNUM - Protección del directorio app
+# Denegar acceso directo a los archivos de la aplicación
+
+Order deny,allow
+Deny from all
+
+# Este archivo protege todo el código PHP del acceso directo
+# Solo se puede acceder a través del punto de entrada público (public/index.php)

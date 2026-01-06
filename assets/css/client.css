@@ -1,0 +1,208 @@
+/**
+ * Estilos específicos para el panel de cliente
+ * DetectNUM
+ */
+
+/* Client-specific enhancements */
+.balance-card {
+    background: linear-gradient(135deg, var(--success-color) 0%, #20c997 100%);
+    color: #fff;
+    border-radius: var(--card-radius);
+    padding: 30px;
+    text-align: center;
+}
+
+.balance-card.low-balance {
+    background: linear-gradient(135deg, #dc3545 0%, #fd7e14 100%);
+}
+
+.balance-card h2 {
+    font-size: 3rem;
+    font-weight: 700;
+    margin: 10px 0;
+}
+
+/* Search form enhanced */
+.search-form-container {
+    background: #fff;
+    border-radius: var(--card-radius);
+    padding: 25px;
+    margin-bottom: 25px;
+}
+
+.search-input-large {
+    font-size: 1.25rem;
+    padding: 15px 20px;
+    border-radius: 12px;
+}
+
+.search-input-large:focus {
+    box-shadow: 0 0 0 4px rgba(233, 69, 96, 0.2);
+    border-color: var(--accent-color);
+}
+
+/* Results highlight */
+.results-header {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    color: #fff;
+    padding: 20px;
+    border-radius: var(--card-radius) var(--card-radius) 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.results-header code {
+    background: rgba(255, 255, 255, 0.2);
+    color: #fff;
+    padding: 5px 15px;
+    border-radius: 8px;
+    font-size: 1.1rem;
+}
+
+/* History item */
+.history-item {
+    padding: 15px 0;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+.history-item:hover {
+    background: #f8f9fa;
+    padding-left: 10px;
+    margin-left: -10px;
+    margin-right: -10px;
+    padding-right: 10px;
+}
+
+.history-item:last-child {
+    border-bottom: none;
+}
+
+/* Profile section */
+.profile-avatar-large {
+    width: 100px;
+    height: 100px;
+    font-size: 2.5rem;
+    margin: 0 auto 20px;
+}
+
+.profile-stats {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+}
+
+.profile-stat {
+    text-align: center;
+}
+
+.profile-stat-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+.profile-stat-label {
+    font-size: 0.85rem;
+    color: #6c757d;
+}
+
+/* Movement list */
+.movement-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.movement-item:last-child {
+    border-bottom: none;
+}
+
+.movement-type {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.movement-icon {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+}
+
+.movement-icon.recharge {
+    background: var(--success-color);
+}
+
+.movement-icon.search {
+    background: var(--primary-color);
+}
+
+/* Empty state */
+.empty-state {
+    text-align: center;
+    padding: 50px 20px;
+    color: #6c757d;
+}
+
+.empty-state i {
+    font-size: 4rem;
+    opacity: 0.5;
+    margin-bottom: 20px;
+}
+
+.empty-state h5 {
+    color: #495057;
+    margin-bottom: 10px;
+}
+
+/* Quick search widget */
+.quick-search-widget {
+    background: linear-gradient(135deg, var(--accent-color) 0%, #ff6b6b 100%);
+    border-radius: var(--card-radius);
+    padding: 25px;
+    color: #fff;
+    margin-bottom: 25px;
+}
+
+.quick-search-widget h5 {
+    margin-bottom: 15px;
+}
+
+.quick-search-widget .form-control {
+    background: rgba(255, 255, 255, 0.95);
+    border: none;
+}
+
+.quick-search-widget .btn {
+    background: var(--primary-color);
+    border: none;
+}
+
+/* Cost info badge */
+.cost-info {
+    background: rgba(255, 193, 7, 0.15);
+    color: #856404;
+    padding: 10px 15px;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.cost-info i {
+    color: #ffc107;
+}
