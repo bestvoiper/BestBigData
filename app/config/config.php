@@ -16,7 +16,13 @@ define('APP_VERSION', '2.0.0');
 // Configuración de URL base (ajustar según el entorno)
 $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http';
 $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
-define('BASE_URL', $protocol . '://' . $host . '/BestBigData');
+
+// En servidor de producción no usar subdirectorio
+if (strpos($host, 'analytics-aserfinc.bestvoiper.com') !== false) {
+    define('BASE_URL', $protocol . '://' . $host);
+} else {
+    define('BASE_URL', $protocol . '://' . $host . '/BestBigData');
+}
 
 // Configuración de base de datos principal
 define('DB_HOST', 'localhost');
