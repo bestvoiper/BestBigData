@@ -15,7 +15,7 @@ function checkSessionTimeout() {
     if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity'] > SESSION_TIMEOUT)) {
         session_unset();
         session_destroy();
-        header('Location: /DetectNUM/login.php?expired=1');
+        header('Location: /BestBigData/login.php?expired=1');
         exit;
     }
     $_SESSION['last_activity'] = time();
@@ -39,7 +39,7 @@ function isClient() {
 // Requerir login
 function requireLogin() {
     if (!isLoggedIn()) {
-        header('Location: /DetectNUM/login.php');
+        header('Location: /BestBigData/login.php');
         exit;
     }
     checkSessionTimeout();
@@ -49,7 +49,7 @@ function requireLogin() {
 function requireAdmin() {
     requireLogin();
     if (!isAdmin()) {
-        header('Location: /DetectNUM/cliente/dashboard.php');
+        header('Location: /BestBigData/cliente/dashboard.php');
         exit;
     }
 }
@@ -58,7 +58,7 @@ function requireAdmin() {
 function requireClient() {
     requireLogin();
     if (!isClient()) {
-        header('Location: /DetectNUM/admin/dashboard.php');
+        header('Location: /BestBigData/admin/dashboard.php');
         exit;
     }
 }

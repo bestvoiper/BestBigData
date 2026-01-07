@@ -18,7 +18,7 @@ header('Content-Type: text/html; charset=utf-8');
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Diagnóstico de Conexiones - DetectNUM</title>
+    <title>Diagnóstico de Conexiones - BestBigData</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
     <style>
@@ -32,7 +32,7 @@ header('Content-Type: text/html; charset=utf-8');
         <i class="bi bi-database-check fs-1 text-primary me-3"></i>
         <div>
             <h1 class="mb-0">Diagnóstico de Conexiones</h1>
-            <small class="text-muted">DetectNUM v<?= APP_VERSION ?></small>
+            <small class="text-muted">BestBigData v<?= APP_VERSION ?></small>
         </div>
     </div>
     

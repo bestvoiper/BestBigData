@@ -1,9 +1,9 @@
 -- =====================================================
--- Base de datos principal DetectNUM
+-- Base de datos principal BestBigData
 -- =====================================================
 
-CREATE DATABASE IF NOT EXISTS detectnum CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-USE detectnum;
+CREATE DATABASE IF NOT EXISTS bestbigdata CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE bestbigdata;
 
 -- Tabla de usuarios
 CREATE TABLE IF NOT EXISTS users (
@@ -93,12 +93,12 @@ INSERT INTO settings (setting_key, setting_value, description) VALUES
 -- Crear usuario administrador por defecto
 -- Password: admin123 (cambiar en producción)
 INSERT INTO users (name, email, password, role, balance, status) VALUES
-('Administrador', 'admin@detectnum.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'admin', 999999.00, 'active');
+('Administrador', 'admin@bestbigdata.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'admin', 999999.00, 'active');
 
 -- Usuario de prueba cliente
 -- Password: cliente123
 INSERT INTO users (name, email, password, role, balance, status) VALUES
-('Cliente Demo', 'cliente@detectnum.com', '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', 'cliente', 100.00, 'active');
+('Cliente Demo', 'cliente@bestbigdata.com', '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', 'cliente', 100.00, 'active');
 
 
 -- =====================================================

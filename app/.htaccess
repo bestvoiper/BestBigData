@@ -1,4 +1,4 @@
-# DetectNUM - Protección del directorio app
+# BestBigData - Protección del directorio app
 # Denegar acceso directo a los archivos de la aplicación
 
 Order deny,allow

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DetectNUM - Iniciar Sesión</title>
+    <title>BestBigData - Iniciar Sesión</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
     <style>
@@ -71,7 +71,7 @@
     <div class="login-card">
         <div class="logo">
             <i class="bi bi-telephone-fill"></i>
-            <h1>DetectNUM</h1>
+            <h1>BestBigData</h1>
             <p class="text-muted">Sistema de Consulta Telefónica</p>
         </div>
         
@@ -169,7 +169,7 @@
         
         <div class="text-center mt-4">
             <small class="text-muted">
-                DetectNUM &copy; <?= date('Y') ?> - Todos los derechos reservados
+                BestBigData &copy; <?= date('Y') ?> - Todos los derechos reservados
             </small>
         </div>
     </div>

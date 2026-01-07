@@ -1,6 +1,6 @@
 /**
  * JavaScript principal
- * DetectNUM
+ * BestBigData
  */
 
 $(document).ready(function() {

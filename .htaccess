@@ -1,14 +1,14 @@
-# DetectNUM - Configuración Apache
+# BestBigData - Configuración Apache
 # Arquitectura MVC con URLs amigables
 
 # Activar el motor de reescritura
 RewriteEngine On
 
 # Establecer la base de la URL
-RewriteBase /DetectNUM/
+RewriteBase /BestBigData/
 
 # Permitir acceso a archivos de assets (CSS, JS, imágenes)
-RewriteCond %{REQUEST_URI} !^/DetectNUM/assets/
+RewriteCond %{REQUEST_URI} !^/BestBigData/assets/
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 

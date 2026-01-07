@@ -59,7 +59,7 @@ include '../includes/header.php';
 <div class="sidebar">
     <div class="logo">
         <i class="bi bi-telephone-fill"></i>
-        <h4>DetectNUM</h4>
+        <h4>BestBigData</h4>
         <small class="text-white-50">Panel Cliente</small>
     </div>
     <nav class="nav flex-column">

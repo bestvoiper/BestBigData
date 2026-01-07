@@ -1,7 +1,7 @@
 <?php
 /**
  * Punto de entrada principal de la aplicación
- * DetectNUM - Arquitectura MVC
+ * BestBigData - Arquitectura MVC
  */
 
 // Definir constante de acceso

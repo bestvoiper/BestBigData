@@ -1,6 +1,6 @@
 <?php
 /**
- * Script de instalación - DetectNUM
+ * Script de instalación - BestBigData
  * Ejecutar una sola vez para crear las tablas y usuarios
  */
 
@@ -20,9 +20,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         
         // Crear base de datos
-        $pdo->exec("CREATE DATABASE IF NOT EXISTS detectnum CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
-        $pdo->exec("USE detectnum");
-        $messages[] = "✓ Base de datos 'detectnum' creada/verificada";
+        $pdo->exec("CREATE DATABASE IF NOT EXISTS bestbigdata CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
+        $pdo->exec("USE bestbigdata");
+        $messages[] = "✓ Base de datos 'bestbigdata' creada/verificada";
         
         // Crear tabla users
         $pdo->exec("CREATE TABLE IF NOT EXISTS users (
@@ -101,16 +101,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $clientePassword = password_hash('cliente123', PASSWORD_BCRYPT);
         
         // Eliminar usuarios existentes si los hay
-        $pdo->exec("DELETE FROM users WHERE email IN ('admin@detectnum.com', 'cliente@detectnum.com')");
+        $pdo->exec("DELETE FROM users WHERE email IN ('admin@bestbigdata.com', 'cliente@bestbigdata.com')");
         
         // Insertar admin
         $stmt = $pdo->prepare("INSERT INTO users (name, email, password, role, balance, status) VALUES (?, ?, ?, ?, ?, ?)");
-        $stmt->execute(['Administrador', 'admin@detectnum.com', $adminPassword, 'admin', 999999.00, 'active']);
-        $messages[] = "✓ Usuario Admin creado (admin@detectnum.com / admin123)";
+        $stmt->execute(['Administrador', 'admin@bestbigdata.com', $adminPassword, 'admin', 999999.00, 'active']);
+        $messages[] = "✓ Usuario Admin creado (admin@bestbigdata.com / admin123)";
         
         // Insertar cliente
-        $stmt->execute(['Cliente Demo', 'cliente@detectnum.com', $clientePassword, 'cliente', 100.00, 'active']);
-        $messages[] = "✓ Usuario Cliente creado (cliente@detectnum.com / cliente123)";
+        $stmt->execute(['Cliente Demo', 'cliente@bestbigdata.com', $clientePassword, 'cliente', 100.00, 'active']);
+        $messages[] = "✓ Usuario Cliente creado (cliente@bestbigdata.com / cliente123)";
         
         $messages[] = "";
         $messages[] = "🎉 ¡Instalación completada exitosamente!";
@@ -125,7 +125,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Instalación - DetectNUM</title>
+    <title>Instalación - BestBigData</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
@@ -150,7 +150,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
     <div class="install-card">
         <div class="text-center mb-4">
-            <h1 class="logo"><i class="bi bi-telephone-fill"></i> DetectNUM</h1>
+            <h1 class="logo"><i class="bi bi-telephone-fill"></i> BestBigData</h1>
             <p class="text-muted">Instalación del Sistema</p>
         </div>
         
@@ -175,10 +175,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="alert alert-info">
                 <h5>Este script creará:</h5>
                 <ul class="mb-0">
-                    <li>Base de datos <code>detectnum</code></li>
+                    <li>Base de datos <code>bestbigdata</code></li>
                     <li>Tablas: users, transactions, search_history, settings</li>
-                    <li>Usuario Admin: <code>admin@detectnum.com</code> / <code>admin123</code></li>
-                    <li>Usuario Cliente: <code>cliente@detectnum.com</code> / <code>cliente123</code></li>
+                    <li>Usuario Admin: <code>admin@bestbigdata.com</code> / <code>admin123</code></li>
+                    <li>Usuario Cliente: <code>cliente@bestbigdata.com</code> / <code>cliente123</code></li>
                 </ul>
             </div>
             
