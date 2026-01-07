@@ -1,7 +1,7 @@
 <?php
 /**
  * Configuración principal de la aplicación
- * DetectNUM - Sistema de Consulta Telefónica
+ * bestbigdata - Sistema de Consulta Telefónica
  */
 
 // Evitar acceso directo
@@ -10,25 +10,31 @@ if (!defined('APP_ROOT')) {
 }
 
 // Configuración de la aplicación
-define('APP_NAME', 'DetectNUM');
+define('APP_NAME', 'bestbigdata');
 define('APP_VERSION', '2.0.0');
 
 // Configuración de URL base (ajustar según el entorno)
 $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http';
 $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
 
+define('ENVIRONMENT', 'development'); // Cambiar a 'production' en producción
+
 // En servidor de producción no usar subdirectorio
-if (strpos($host, 'analytics-aserfinc.bestvoiper.com') !== false) {
+if (ENVIRONMENT === 'production') {
     define('BASE_URL', $protocol . '://' . $host);
+
+    define('DB_HOST', 'localhost');
+    define('DB_NAME', 'bestbigdata');
+    define('DB_USER', 'BestAudioApp');
+    define('DB_PASS', 'bestaudio_2025*');
 } else {
     define('BASE_URL', $protocol . '://' . $host . '/BestBigData');
-}
 
-// Configuración de base de datos principal
-define('DB_HOST', 'localhost');
-define('DB_NAME', 'detectnum');
-define('DB_USER', 'root');
-define('DB_PASS', '');
+    define('DB_HOST', 'localhost');
+    define('DB_NAME', 'bestbigdata');
+    define('DB_USER', 'root');
+    define('DB_PASS', '');
+}
 define('DB_CHARSET', 'utf8mb4');
 
 // NOTA: La configuración de bases CDR está centralizada en app/models/Conexion.php
@@ -40,7 +46,9 @@ ini_set('display_errors', 1);
 // Zona horaria
 date_default_timezone_set('America/Mexico_City');
 
-// Configuración de sesión
-ini_set('session.cookie_httponly', 1);
-ini_set('session.use_only_cookies', 1);
-ini_set('session.cookie_secure', isset($_SERVER['HTTPS']));
+// Configuración de sesión (solo si no hay sesión activa)
+if (session_status() === PHP_SESSION_NONE) {
+    ini_set('session.cookie_httponly', 1);
+    ini_set('session.use_only_cookies', 1);
+    ini_set('session.cookie_secure', isset($_SERVER['HTTPS']));
+}

@@ -1,15 +1,16 @@
 <?php
 /**
  * Configuración de bases de datos
- * Sistema DetectNUM - Conexión a múltiples bases de datos CDR
+ * Sistema bestbigdata - Conexión a múltiples bases de datos CDR
+ * 
+ * NOTA: Los parámetros de conexión principal (DB_HOST, DB_NAME, DB_USER, DB_PASS, DB_CHARSET)
+ * están centralizados en app/config/config.php según el entorno (production/development)
  */
 
-// Base de datos principal del sistema (usuarios, saldos, etc.)
-define('DB_HOST', 'localhost');
-define('DB_NAME', 'detectnum');
-define('DB_USER', 'root');
-define('DB_PASS', '');
-define('DB_CHARSET', 'utf8mb4');
+// Asegurar que la configuración principal esté cargada
+if (!defined('DB_HOST')) {
+    require_once __DIR__ . '/../app/config/config.php';
+}
 
 // Configuración de las 4 bases de datos CDR
 $cdr_databases = [

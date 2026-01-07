@@ -45,6 +45,11 @@ class Search extends Model
             }
 
             rsort($tables);
+            
+            // Limitar a las últimas 90 tablas si no hay filtro de fechas para evitar timeouts
+            if (!$startDate && !$endDate && count($tables) > 90) {
+                $tables = array_slice($tables, 0, 90);
+            }
         } catch (PDOException $e) {
             error_log("Error obteniendo tablas CDR: " . $e->getMessage());
         }
@@ -59,14 +64,19 @@ class Search extends Model
     {
         $results = [];
         $cdrConnections = $this->getCDRConnections();
+        
+        // Debug: verificar conexiones
+        error_log("CDR Connections count: " . count($cdrConnections));
 
         $cleanNumber = preg_replace('/[^0-9]/', '', $phoneNumber);
+        error_log("Searching for: {$cleanNumber}");
 
         foreach ($cdrConnections as $dbKey => $dbInfo) {
             $connection = $dbInfo['connection'];
             $prefix = $dbInfo['prefix'];
 
             $tables = $this->getCDRTables($connection, $prefix, $startDate, $endDate);
+            error_log("Server {$dbKey}: " . count($tables) . " tables to search");
 
             foreach ($tables as $table) {
                 try {
@@ -77,10 +87,9 @@ class Search extends Model
                                 stoptime,
                                 callerip,
                                 calleeip,
-                                callduration,
+                                holdtime,
                                 billsec,
-                                disposition,
-                                hangupcause
+                                endreason
                             FROM {$table}
                             WHERE callere164 LIKE ? OR calleee164 LIKE ?
                             ORDER BY starttime DESC
@@ -98,10 +107,12 @@ class Search extends Model
                         $results[] = $row;
                     }
                 } catch (PDOException $e) {
-                    error_log("Error buscando en {$table}: " . $e->getMessage());
+                    error_log("Error buscando en {$dbKey}/{$table}: " . $e->getMessage());
                 }
             }
         }
+        
+        error_log("Total results found: " . count($results));
 
         usort($results, function ($a, $b) {
             return strtotime($b['starttime']) - strtotime($a['starttime']);

@@ -104,13 +104,13 @@ $showBalance = true;
                                 <td><?= formatDate($row['starttime']) ?></td>
                                 <td><code><?= e($row['callere164']) ?></code></td>
                                 <td><code><?= e($row['calleee164']) ?></code></td>
-                                <td><?= gmdate('H:i:s', $row['callduration'] ?? 0) ?></td>
+                                <td><?= gmdate('H:i:s', $row['holdtime'] ?? 0) ?></td>
                                 <td>
                                     <?php 
-                                    $disposition = $row['disposition'] ?? '';
-                                    $badgeClass = $disposition == 'ANSWERED' ? 'success' : 'secondary';
+                                    $endreason = $row['endreason'] ?? '';
+                                    $badgeClass = $endreason == 'ANSWERED' ? 'success' : 'secondary';
                                     ?>
-                                    <span class="badge bg-<?= $badgeClass ?>"><?= e($disposition) ?></span>
+                                    <span class="badge bg-<?= $badgeClass ?>"><?= e($endreason) ?></span>
                                 </td>
                                 <td><span class="badge bg-info"><?= e($row['source_db']) ?></span></td>
                             </tr>

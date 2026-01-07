@@ -1,0 +1,26 @@
+# Archivos de configuración local
+.htaccess
+
+# Archivos de debug/desarrollo
+debug_search.php
+
+# Logs
+*.log
+logs/
+
+# IDE
+.vscode/
+.idea/
+*.sublime-*
+
+# Sistema
+.DS_Store
+Thumbs.db
+
+# Dependencias
+vendor/
+node_modules/
+
+# Archivos temporales
+*.tmp
+*.cache

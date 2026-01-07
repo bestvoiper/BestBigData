@@ -13,15 +13,16 @@ class Conexion
     
     /**
      * Configuración de la base de datos principal
+     * Los parámetros se definen en app/config/config.php según el entorno
      */
     private static function getMainConfig()
     {
         return [
-            'host' => defined('DB_HOST') ? DB_HOST : 'localhost',
-            'name' => defined('DB_NAME') ? DB_NAME : 'bestbigdata',
-            'user' => defined('DB_USER') ? DB_USER : 'root',
-            'pass' => defined('DB_PASS') ? DB_PASS : '',
-            'charset' => defined('DB_CHARSET') ? DB_CHARSET : 'utf8mb4'
+            'host' => DB_HOST,
+            'name' => DB_NAME,
+            'user' => DB_USER,
+            'pass' => DB_PASS,
+            'charset' => DB_CHARSET
         ];
     }
     
@@ -92,6 +93,7 @@ class Conexion
     {
         if (self::$mainConnection === null) {
             $config = self::getMainConfig();
+
             try {
                 $dsn = "mysql:host={$config['host']};dbname={$config['name']};charset={$config['charset']}";
                 self::$mainConnection = new PDO($dsn, $config['user'], $config['pass'], [

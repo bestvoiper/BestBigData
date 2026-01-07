@@ -234,14 +234,14 @@ include '../includes/header.php';
                             </td>
                             <td>
                                 <?php
-                                $dispClass = match($r['disposition']) {
+                                $dispClass = match($r['endreason'] ?? '') {
                                     'ANSWERED' => 'success',
                                     'NO ANSWER' => 'warning',
                                     'BUSY' => 'danger',
                                     default => 'secondary'
                                 };
                                 ?>
-                                <span class="badge bg-<?= $dispClass ?>"><?= sanitize($r['disposition']) ?></span>
+                                <span class="badge bg-<?= $dispClass ?>"><?= sanitize($r['endreason'] ?? '') ?></span>
                             </td>
                             <td>
                                 <span class="badge badge-<?= $r['match_type'] ?>">
