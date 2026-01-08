@@ -13,9 +13,20 @@ function formatMoney($amount)
 
 /**
  * Formatear fecha
+ * Soporta timestamps Unix y strings de fecha
  */
 function formatDate($date, $format = 'd/m/Y H:i')
 {
+    if (empty($date)) {
+        return '-';
+    }
+    
+    // Si es un número (timestamp Unix), usarlo directamente
+    if (is_numeric($date)) {
+        return date($format, intval($date));
+    }
+    
+    // Si es string, convertir con strtotime
     return date($format, strtotime($date));
 }
 

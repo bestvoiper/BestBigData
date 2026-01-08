@@ -25,8 +25,8 @@ if (ENVIRONMENT === 'production') {
 
     define('DB_HOST', 'localhost');
     define('DB_NAME', 'bestbigdata');
-    define('DB_USER', 'BestAudioApp');
-    define('DB_PASS', 'bestaudio_2025*');
+    define('DB_USER', 'developers');
+    define('DB_PASS', 'Luisda0806*++');
 } else {
     define('BASE_URL', $protocol . '://' . $host . '/BestBigData');
 

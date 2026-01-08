@@ -6,8 +6,8 @@
 
 // Configuración de base de datos
 $host = 'localhost';
-$user = 'root';
-$pass = '';
+$user = 'developers';
+$pass = 'Luisda0806*++';
 $charset = 'utf8mb4';
 
 $messages = [];
