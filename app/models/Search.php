@@ -88,7 +88,6 @@ class Search extends Model
                                 callerip,
                                 calleeip,
                                 holdtime,
-                                billsec,
                                 endreason
                             FROM {$table}
                             WHERE callere164 LIKE ? OR calleee164 LIKE ?

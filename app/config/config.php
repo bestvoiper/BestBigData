@@ -44,7 +44,7 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
 // Zona horaria
-date_default_timezone_set('America/Mexico_City');
+date_default_timezone_set('America/Bogota');
 
 // Configuración de sesión (solo si no hay sesión activa)
 if (session_status() === PHP_SESSION_NONE) {
