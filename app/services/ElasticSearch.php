@@ -43,13 +43,22 @@ class ElasticSearch
         $url = "http://{$this->host}:{$this->port}/{$endpoint}";
         
         $ch = curl_init();
-        curl_setopt_array($ch, [
+        $options = [
             CURLOPT_URL => $url,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_TIMEOUT => $this->timeout,
+            CURLOPT_CONNECTTIMEOUT => 5,
             CURLOPT_CUSTOMREQUEST => $method,
             CURLOPT_HTTPHEADER => ['Content-Type: application/json'],
-        ]);
+        ];
+        
+        // Para HEAD requests, configuración especial
+        if ($method === 'HEAD') {
+            $options[CURLOPT_NOBODY] = true;
+            $options[CURLOPT_HEADER] = true;
+        }
+        
+        curl_setopt_array($ch, $options);
         
         if ($body !== null) {
             curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($body));
@@ -62,6 +71,11 @@ class ElasticSearch
         
         if ($error) {
             throw new Exception("Elasticsearch error: $error");
+        }
+        
+        // Para HEAD, solo retornar el código HTTP
+        if ($method === 'HEAD') {
+            return ['_http_code' => $httpCode];
         }
         
         $data = json_decode($response, true) ?? [];
@@ -181,8 +195,13 @@ class ElasticSearch
      */
     public function indexExists(): bool
     {
-        $response = $this->request('HEAD', $this->index);
-        return $response['_http_code'] === 200;
+        try {
+            // Usar GET en lugar de HEAD para evitar problemas de timeout
+            $response = $this->request('GET', "{$this->index}/_settings?flat_settings=true");
+            return $response['_http_code'] === 200;
+        } catch (Exception $e) {
+            return false;
+        }
     }
     
     /**
