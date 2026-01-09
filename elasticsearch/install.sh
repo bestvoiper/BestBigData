@@ -18,19 +18,40 @@ fi
 
 echo "📦 Sistema detectado: $OS"
 
+# Instalar dependencias necesarias
+echo "📦 Instalando dependencias..."
+if [ "$OS" = "debian" ]; then
+    apt-get update
+    apt-get install -y curl wget gnupg apt-transport-https
+fi
+
 # Instalar Java (requerido por Elasticsearch)
 echo "☕ Instalando Java..."
 if [ "$OS" = "debian" ]; then
-    apt-get update
-    apt-get install -y openjdk-17-jdk
+    # Intentar Java 21 primero (Debian Trixie), luego 17
+    apt-get install -y openjdk-21-jdk 2>/dev/null || apt-get install -y openjdk-17-jdk 2>/dev/null || apt-get install -y default-jdk
 else
-    yum install -y java-17-openjdk
+    yum install -y java-17-openjdk || yum install -y java-21-openjdk
+fi
+
+# Verificar Java
+java -version
+if [ $? -ne 0 ]; then
+    echo "❌ Error: Java no se instaló correctamente"
+    exit 1
 fi
 
 # Agregar repositorio de Elasticsearch
 echo "📥 Agregando repositorio de Elasticsearch..."
 if [ "$OS" = "debian" ]; then
-    wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | gpg --dearmor -o /usr/share/keyrings/elasticsearch-keyring.gpg
+    # Descargar e importar la key GPG correctamente
+    wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | gpg --dearmor -o /usr/share/keyrings/elasticsearch-keyring.gpg 2>/dev/null
+    
+    # Si gpg --dearmor falla, intentar método alternativo
+    if [ ! -f /usr/share/keyrings/elasticsearch-keyring.gpg ]; then
+        wget -qO /usr/share/keyrings/elasticsearch-keyring.gpg https://artifacts.elastic.co/GPG-KEY-elasticsearch
+    fi
+    
     echo "deb [signed-by=/usr/share/keyrings/elasticsearch-keyring.gpg] https://artifacts.elastic.co/packages/8.x/apt stable main" | tee /etc/apt/sources.list.d/elastic-8.x.list
     apt-get update
     apt-get install -y elasticsearch
