@@ -22,6 +22,10 @@ class Search extends Model
     public function getCDRTables($connection, $prefix, $startDate = null, $endDate = null)
     {
         $tables = [];
+        
+        // Convertir strings vacíos a null
+        $startDate = !empty($startDate) ? $startDate : null;
+        $endDate = !empty($endDate) ? $endDate : null;
 
         try {
             $stmt = $connection->query("SHOW TABLES LIKE '{$prefix}%'");
@@ -46,9 +50,10 @@ class Search extends Model
 
             rsort($tables);
             
-            // Limitar a las últimas 90 tablas si no hay filtro de fechas para evitar timeouts
-            if (!$startDate && !$endDate && count($tables) > 90) {
-                $tables = array_slice($tables, 0, 90);
+            // Limitar tablas para evitar búsquedas muy largas
+            $maxTables = ($startDate && $endDate) ? 60 : 30;
+            if (count($tables) > $maxTables) {
+                $tables = array_slice($tables, 0, $maxTables);
             }
         } catch (PDOException $e) {
             error_log("Error obteniendo tablas CDR: " . $e->getMessage());
@@ -59,64 +64,153 @@ class Search extends Model
 
     /**
      * Buscar número en las bases de datos CDR
+     * FLEXIBLE: busca el número sin importar prefijos (57, +57, 011, etc.)
      */
     public function searchPhoneNumber($phoneNumber, $startDate = null, $endDate = null)
     {
         $results = [];
         $cdrConnections = $this->getCDRConnections();
         
-        // Debug: verificar conexiones
-        error_log("CDR Connections count: " . count($cdrConnections));
-
-        $cleanNumber = preg_replace('/[^0-9]/', '', $phoneNumber);
-        error_log("Searching for: {$cleanNumber}");
+        // Limpiar y obtener el número base (sin prefijos)
+        $baseNumber = $this->extractBaseNumber($phoneNumber);
+        
+        // Máximo de resultados total
+        $maxTotalResults = 500;
 
         foreach ($cdrConnections as $dbKey => $dbInfo) {
+            if (count($results) >= $maxTotalResults) break;
+            
             $connection = $dbInfo['connection'];
             $prefix = $dbInfo['prefix'];
-
             $tables = $this->getCDRTables($connection, $prefix, $startDate, $endDate);
-            error_log("Server {$dbKey}: " . count($tables) . " tables to search");
+            
+            if (empty($tables)) continue;
+            
+            // Buscar en lotes de tablas usando UNION ALL
+            $batchSize = 5; // Reducido para mejor rendimiento con LIKE
+            $tableBatches = array_chunk($tables, $batchSize);
+            
+            foreach ($tableBatches as $batch) {
+                if (count($results) >= $maxTotalResults) break;
+                
+                $batchResults = $this->searchBatchTablesFlexible($connection, $batch, $baseNumber, $dbKey);
+                $results = array_merge($results, $batchResults);
+            }
+        }
 
+        // Ordenar solo al final
+        usort($results, function ($a, $b) {
+            return ($b['starttime'] ?? 0) - ($a['starttime'] ?? 0);
+        });
+
+        return array_slice($results, 0, $maxTotalResults);
+    }
+    
+    /**
+     * Extraer número base quitando prefijos comunes
+     * Input: "573124560009", "+573124560009", "3124560009", "0113124560009"
+     * Output: "3124560009" (número sin prefijo de país)
+     */
+    private function extractBaseNumber($number)
+    {
+        // Limpiar: solo dígitos
+        $clean = preg_replace('/[^0-9]/', '', $number);
+        
+        // Quitar prefijo 011 (código internacional desde USA)
+        if (strlen($clean) > 10 && substr($clean, 0, 3) === '011') {
+            $clean = substr($clean, 3);
+        }
+        
+        // Quitar prefijo 57 (Colombia) si el número es largo
+        if (strlen($clean) > 10 && substr($clean, 0, 2) === '57') {
+            $clean = substr($clean, 2);
+        }
+        
+        return $clean;
+    }
+    
+    /**
+     * Buscar en múltiples tablas con LIKE flexible
+     */
+    private function searchBatchTablesFlexible($connection, $tables, $baseNumber, $dbKey)
+    {
+        $results = [];
+        
+        // UNION ALL de todas las tablas del batch
+        $unions = [];
+        foreach ($tables as $table) {
+            $unions[] = "(SELECT 
+                            callere164, calleee164, starttime, stoptime,
+                            callerip, calleeip, holdtime, endreason,
+                            '{$table}' as source_table
+                         FROM {$table}
+                         WHERE callere164 LIKE ? OR calleee164 LIKE ?
+                         LIMIT 30)";
+        }
+        
+        if (empty($unions)) return [];
+        
+        $sql = implode(" UNION ALL ", $unions) . " LIMIT 150";
+        
+        // Patrón: buscar el número base en cualquier parte
+        $searchPattern = '%' . $baseNumber . '%';
+        
+        // Crear array de parámetros (2 por cada tabla: caller y callee)
+        $params = [];
+        foreach ($tables as $table) {
+            $params[] = $searchPattern;
+            $params[] = $searchPattern;
+        }
+        
+        try {
+            $stmt = $connection->prepare($sql);
+            $stmt->execute($params);
+            $rows = $stmt->fetchAll();
+            
+            foreach ($rows as $row) {
+                $row['source_db'] = $dbKey;
+                $results[] = $row;
+            }
+        } catch (PDOException $e) {
+            // Si falla el UNION, buscar tabla por tabla (fallback)
             foreach ($tables as $table) {
-                try {
-                    $sql = "SELECT 
-                                callere164,
-                                calleee164,
-                                starttime,
-                                stoptime,
-                                callerip,
-                                calleeip,
-                                holdtime,
-                                endreason
-                            FROM {$table}
-                            WHERE callere164 LIKE ? OR calleee164 LIKE ?
-                            ORDER BY starttime DESC
-                            LIMIT 500";
-
-                    $stmt = $connection->prepare($sql);
-                    $searchPattern = "%{$cleanNumber}%";
-                    $stmt->execute([$searchPattern, $searchPattern]);
-
-                    $rows = $stmt->fetchAll();
-
-                    foreach ($rows as $row) {
-                        $row['source_db'] = $dbKey;
-                        $row['source_table'] = $table;
-                        $results[] = $row;
-                    }
-                } catch (PDOException $e) {
-                    error_log("Error buscando en {$dbKey}/{$table}: " . $e->getMessage());
-                }
+                $results = array_merge($results, 
+                    $this->searchSingleTableFlexible($connection, $table, $baseNumber, $dbKey));
             }
         }
         
-        error_log("Total results found: " . count($results));
-
-        usort($results, function ($a, $b) {
-            return strtotime($b['starttime']) - strtotime($a['starttime']);
-        });
-
+        return $results;
+    }
+    
+    /**
+     * Búsqueda en una sola tabla (fallback)
+     */
+    private function searchSingleTableFlexible($connection, $table, $baseNumber, $dbKey)
+    {
+        $results = [];
+        $searchPattern = '%' . $baseNumber . '%';
+        
+        try {
+            $sql = "SELECT 
+                        callere164, calleee164, starttime, stoptime,
+                        callerip, calleeip, holdtime, endreason
+                    FROM {$table}
+                    WHERE callere164 LIKE ? OR calleee164 LIKE ?
+                    LIMIT 30";
+            
+            $stmt = $connection->prepare($sql);
+            $stmt->execute([$searchPattern, $searchPattern]);
+            $rows = $stmt->fetchAll();
+            
+            foreach ($rows as $row) {
+                $row['source_db'] = $dbKey;
+                $row['source_table'] = $table;
+                $results[] = $row;
+            }
+        } catch (PDOException $e) {
+            // Silencioso
+        }
+        
         return $results;
     }
 

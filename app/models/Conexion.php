@@ -131,7 +131,11 @@ class Conexion
                 $pdo = new PDO($dsn, $db['user'], $db['pass'], [
                     PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
                     PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-                    PDO::ATTR_TIMEOUT => 10
+                    PDO::ATTR_PERSISTENT => true,  // Conexión persistente
+                    PDO::ATTR_TIMEOUT => 5,        // Timeout reducido a 5 segundos
+                    PDO::ATTR_EMULATE_PREPARES => true,  // Mejora rendimiento para consultas simples
+                    PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true,
+                    PDO::MYSQL_ATTR_COMPRESS => true,  // Compresión de datos
                 ]);
                 self::$cdrConnections[$key] = [
                     'connection' => $pdo,

@@ -17,10 +17,11 @@ define('APP_VERSION', '2.0.0');
 $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http';
 $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
 
-define('ENVIRONMENT', 'development'); // Cambiar a 'production' en producción
+// Leer entorno desde .htaccess (SetEnv APP_ENV) o variable de sistema
+$environment = $_SERVER['APP_ENV'] ?? getenv('APP_ENV') ?: 'development';
 
 // En servidor de producción no usar subdirectorio
-if (ENVIRONMENT === 'production') {
+if ($environment === 'production') {
     define('BASE_URL', $protocol . '://' . $host);
 
     define('DB_HOST', 'localhost');
