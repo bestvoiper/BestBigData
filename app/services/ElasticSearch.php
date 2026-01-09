@@ -304,6 +304,10 @@ class ElasticSearch
         $startTime = $row['starttime'] ?? 0;
         $recordId = md5("{$server}_{$table}_{$caller}_{$callee}_{$startTime}");
         
+        // Validar IPs (Elasticsearch requiere formato válido)
+        $callerIp = self::validateIP($row['callerip'] ?? null);
+        $calleeIp = self::validateIP($row['calleeip'] ?? null);
+        
         return [
             'record_id' => $recordId,
             'caller' => $caller,
@@ -316,11 +320,32 @@ class ElasticSearch
             'stop_time' => isset($row['stoptime']) ? (is_numeric($row['stoptime']) ? (int)$row['stoptime'] : strtotime($row['stoptime']) * 1000) : null,
             'duration' => (int)($row['holdtime'] ?? 0),
             'end_reason' => $row['endreason'] ?? '',
-            'caller_ip' => $row['callerip'] ?? null,
-            'callee_ip' => $row['calleeip'] ?? null,
+            'caller_ip' => $callerIp,
+            'callee_ip' => $calleeIp,
             'source_server' => $server,
             'source_table' => $table
         ];
+    }
+    
+    /**
+     * Validar y limpiar dirección IP
+     */
+    private static function validateIP($ip): ?string
+    {
+        if (empty($ip)) {
+            return null;
+        }
+        
+        // Limpiar espacios
+        $ip = trim($ip);
+        
+        // Verificar si es una IP válida (IPv4 o IPv6)
+        if (filter_var($ip, FILTER_VALIDATE_IP)) {
+            return $ip;
+        }
+        
+        // Si no es válida, retornar null
+        return null;
     }
     
     /**
