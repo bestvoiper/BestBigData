@@ -4,15 +4,14 @@
  * Importa registros desde los servidores MySQL a Elasticsearch
  */
 
+// Sin límite de tiempo (la sincronización puede tardar varios minutos)
+set_time_limit(0);
+ini_set('max_execution_time', 0);
+
 define('APP_ROOT', dirname(__DIR__));
 require_once APP_ROOT . '/app/config/config.php';
 require_once APP_ROOT . '/app/models/Conexion.php';
 require_once APP_ROOT . '/app/services/ElasticSearch.php';
-
-// Para ejecución CLI sin límite de tiempo
-if (php_sapi_name() === 'cli') {
-    set_time_limit(0);
-}
 
 header('Content-Type: text/html; charset=utf-8');
 
