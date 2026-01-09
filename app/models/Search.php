@@ -65,8 +65,55 @@ class Search extends Model
     /**
      * Buscar número en las bases de datos CDR
      * FLEXIBLE: busca el número sin importar prefijos (57, +57, 011, etc.)
+     * Usa Elasticsearch si está disponible, sino MySQL
      */
     public function searchPhoneNumber($phoneNumber, $startDate = null, $endDate = null)
+    {
+        // Intentar usar Elasticsearch primero (mucho más rápido)
+        if (defined('USE_ELASTICSEARCH') && USE_ELASTICSEARCH) {
+            $esResult = $this->searchWithElasticsearch($phoneNumber, $startDate, $endDate);
+            if ($esResult !== false) {
+                return $esResult;
+            }
+        }
+        
+        // Fallback a MySQL si ES no está disponible
+        return $this->searchWithMySQL($phoneNumber, $startDate, $endDate);
+    }
+    
+    /**
+     * Búsqueda usando Elasticsearch (RÁPIDA)
+     * Retorna false si ES no está disponible
+     */
+    private function searchWithElasticsearch($phoneNumber, $startDate = null, $endDate = null)
+    {
+        try {
+            require_once APP_ROOT . '/app/services/ElasticSearch.php';
+            
+            $es = ElasticSearch::getInstance();
+            
+            if (!$es->isAvailable()) {
+                error_log("Elasticsearch no disponible, usando MySQL");
+                return false;
+            }
+            
+            $result = $es->searchPhone($phoneNumber, $startDate, $endDate, 500);
+            
+            // Log de rendimiento
+            error_log("ES Search: {$phoneNumber} - {$result['total']} results in {$result['search_time_ms']}ms");
+            
+            return $result['results'];
+            
+        } catch (Exception $e) {
+            error_log("Error en Elasticsearch: " . $e->getMessage());
+            return false;
+        }
+    }
+    
+    /**
+     * Búsqueda usando MySQL (LENTA - fallback)
+     */
+    private function searchWithMySQL($phoneNumber, $startDate = null, $endDate = null)
     {
         $results = [];
         $cdrConnections = $this->getCDRConnections();

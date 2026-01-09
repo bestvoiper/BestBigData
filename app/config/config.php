@@ -41,6 +41,11 @@ define('DB_CHARSET', 'utf8mb4');
 
 // NOTA: La configuración de bases CDR está centralizada en app/models/Conexion.php
 
+// Configuración de Elasticsearch
+define('ELASTICSEARCH_HOST', 'localhost');
+define('ELASTICSEARCH_PORT', 9200);
+define('USE_ELASTICSEARCH', true); // Cambiar a false para usar MySQL directo
+
 // Configuración de errores (cambiar a 0 en producción)
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
