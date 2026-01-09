@@ -153,7 +153,7 @@ class Search extends Model
         $sql = implode(" UNION ALL ", $unions) . " LIMIT 150";
         
         // Patrón: buscar el número base en cualquier parte
-        $searchPattern = '%' . $baseNumber . '%';
+        $searchPattern = '%' . $baseNumber ;
         
         // Crear array de parámetros (2 por cada tabla: caller y callee)
         $params = [];
@@ -188,7 +188,7 @@ class Search extends Model
     private function searchSingleTableFlexible($connection, $table, $baseNumber, $dbKey)
     {
         $results = [];
-        $searchPattern = '%' . $baseNumber . '%';
+        $searchPattern = '%' . $baseNumber;
         
         try {
             $sql = "SELECT 
