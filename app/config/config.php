@@ -19,6 +19,7 @@ $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
 
 // Leer entorno desde .htaccess (SetEnv APP_ENV) o variable de sistema
 $environment = $_SERVER['APP_ENV'] ?? getenv('APP_ENV') ?: 'development';
+define('ENVIRONMENT', $environment);
 
 // En servidor de producción no usar subdirectorio
 if ($environment === 'production') {
